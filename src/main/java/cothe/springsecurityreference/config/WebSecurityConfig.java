@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -25,18 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         User.UserBuilder users = User.withDefaultPasswordEncoder();
         auth
                 .jdbcAuthentication()
-                .dataSource(dataSource)
-                .withDefaultSchema()
-                .withUser(users.username("user").password("password").roles("USER"))
-                .withUser(users.username("admin").password("password").roles("USER", "ADMIN"));
+                .dataSource(dataSource);
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withDefaultPasswordEncoder().username("user").password("password").roles("USER").build());
-        return manager;
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -50,4 +43,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .loginPage("/login")
                 .permitAll();
     }
+
 }
