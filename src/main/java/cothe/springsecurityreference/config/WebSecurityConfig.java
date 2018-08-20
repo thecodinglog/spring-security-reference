@@ -24,10 +24,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        User.UserBuilder users = User.withDefaultPasswordEncoder();
+        //User.UserBuilder users = User.withDefaultPasswordEncoder();
         auth
                 .jdbcAuthentication()
                 .dataSource(dataSource);
+    }
+
+    @Bean
+    public PasswordEncoder noOpPasswordEncoder(){
+        return NoOpPasswordEncoder.getInstance();
     }
 
 
